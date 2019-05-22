@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -37,17 +35,9 @@ func main() {
 	db := gormConnect()
 	defer db.Close()
 
-	userExample := User{}
-	userExample.Name = "elaborate"
-	userExample.Email = "elaborate@example.com"
-	userExample.CreatedAt = time.Now()
-	userExample.UpdatedAt = time.Now()
-	marshalUser, err := json.Marshal(userExample)
-
-	if err != nil {
-		panic(err.Error())
+	if !db.HasTable(&User{}) {
+		db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&User{})
 	}
 
-	fmt.Println("thrown json:", string(marshalUser))
-	db.Create(&userExample)
+	db.AutoMigrate(&User{})
 }
