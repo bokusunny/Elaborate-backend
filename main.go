@@ -1,42 +1,27 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"math/rand"
-	"net/http"
-	"time"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-// ResponseData should have tag?
-type ResponseData struct {
-	StatusCode int
-	Data       string
-}
+func gormConnect() *gorm.DB {
+	// TODO: 環境変数に置き換える
+	DBMS := "mysql"
+	USER := "root"
+	PASS := "Gakufu1407"
+	DBNAME := "Elaborate"
 
-func rootHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "<h1>Hello, Elaborate-backend!</h1>")
-}
-
-func omikujiHandler(w http.ResponseWriter, r *http.Request) {
-	oracles := []string{"大吉", "中吉", "小吉", "末吉", "吉", "凶", "大凶"}
-	response := ResponseData{http.StatusOK, oracles[rand.Intn(7)]}
-
-	res, err := json.Marshal(response)
+	CONNECT := USER + ":" + PASS + "@" + "/" + DBNAME
+	db, err := gorm.Open(DBMS, CONNECT)
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		panic(err.Error())
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprint(w, string(res))
+	return db
 }
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
-
-	http.HandleFunc("/", rootHandler)
-	http.HandleFunc("/omikuji", omikujiHandler)
-	http.ListenAndServe(":3000", nil)
+	db := gormConnect()
+	defer db.Close()
 }
