@@ -1,6 +1,10 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"net/http"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -31,6 +35,15 @@ func gormConnect() *gorm.DB {
 	return db
 }
 
+func newUser(name string, email string) *User {
+	return &User{
+		Name:      name,
+		Email:     email,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+}
+
 func main() {
 	db := gormConnect()
 	defer db.Close()
@@ -40,4 +53,29 @@ func main() {
 	}
 
 	db.AutoMigrate(&User{})
+
+	createUser := func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+			return
+		}
+
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		}
+
+		log.Printf("I got post request, json: " + string(body))
+
+		var user User
+		if err := json.Unmarshal(body, &user); err != nil {
+			log.Fatal(err)
+		}
+
+		newUser := newUser(user.Name, user.Email)
+		db.Create(&newUser)
+	}
+
+	http.HandleFunc("/", createUser)
+	log.Fatal(http.ListenAndServe(":3000", nil))
 }
