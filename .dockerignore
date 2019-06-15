@@ -1,4 +1,4 @@
 .vscode
-vendor/**
-!/vendor/.keep
+.gitignore
+README.md
 tmp/runner-build
