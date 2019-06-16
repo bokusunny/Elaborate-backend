@@ -1,4 +1,2 @@
 .vscode
-vendor/**
-!/vendor/.keep
 tmp/runner-build

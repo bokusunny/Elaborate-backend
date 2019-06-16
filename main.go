@@ -11,6 +11,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
+// User has user data sent by firebase cloud functions
 type User struct {
 	ID        int       `json:"id" gorm:"primary_key auto_increment"`
 	Name      string    `json:"name"`
