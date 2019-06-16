@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -19,13 +20,13 @@ type User struct {
 }
 
 func gormConnect() *gorm.DB {
-	// TODO: 環境変数に置き換える
 	DBMS := "mysql"
-	USER := "root"
-	PASS := "Gakufu1407"
-	DBNAME := "Elaborate"
+	USER := "progate-mafia"
+	PASS := "ninjawanko"
+	PROTOCOL := "tcp(mysql:3306)"
+	DBNAME := "elaborate"
 
-	CONNECT := USER + ":" + PASS + "@" + "/" + DBNAME
+	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME
 	db, err := gorm.Open(DBMS, CONNECT)
 
 	if err != nil {
@@ -44,14 +45,14 @@ func newUser(name string, email string) *User {
 }
 
 func main() {
-	// db := gormConnect()
-	// defer db.Close()
+	db := gormConnect()
+	defer db.Close()
 
-	// if !db.HasTable(&User{}) {
-	// 	db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&User{})
-	// }
+	if !db.HasTable(&User{}) {
+		db.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&User{})
+	}
 
-	// db.AutoMigrate(&User{})
+	db.AutoMigrate(&User{})
 
 	createUser := func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -59,21 +60,20 @@ func main() {
 			return
 		}
 
-		// body, err := ioutil.ReadAll(r.Body)
-		// if err != nil {
-		// 	http.Error(w, "Error reading request body", http.StatusInternalServerError)
-		// }
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		}
 
-		// log.Printf("I got post request, json: " + string(body))
+		log.Printf("I got post request, json: " + string(body))
 
-		// var user User
-		// if err := json.Unmarshal(body, &user); err != nil {
-		// 	log.Fatal(err)
-		// }
+		var user User
+		if err := json.Unmarshal(body, &user); err != nil {
+			log.Fatal(err)
+		}
 
-		// newUser := newUser(user.Name, user.Email)
-		// db.Create(&newUser)
-		fmt.Println("pong")
+		newUser := newUser(user.Name, user.Email)
+		db.Create(&newUser)
 	}
 
 	http.HandleFunc("/", createUser)
