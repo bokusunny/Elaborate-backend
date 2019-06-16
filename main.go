@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -77,6 +79,13 @@ func main() {
 		db.Create(&newUser)
 	}
 
-	http.HandleFunc("/", createUser)
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	// TODO: Arrange CORS config
+	allowedOrigins := handlers.AllowedOrigins([]string{"http://localhot:8080"})
+	allowedMethods := handlers.AllowedMethods([]string{"GET"})
+	allowedHeaders := handlers.AllowedHeaders([]string{"Authorization"})
+
+	r := mux.NewRouter()
+	r.HandleFunc("/", createUser)
+
+	log.Fatal(http.ListenAndServe(":3000", handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(r)))
 }
