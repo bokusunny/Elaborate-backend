@@ -1,7 +1,26 @@
 version: '3'
 services:
+  mysql:
+    build: ./docker/mysql
+    image: elaborate/mysql
+    container_name: elaborate-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: elaborate
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: progate-mafia
+      MYSQL_PASSWORD: ninjawanko
+    volumes:
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
   app:
-    build: .
+    links:
+      - mysql
+    build:
+      context: .
+      dockerfile: ./docker/golang/Dockerfile
+    image: elaborate/backend
+    container_name: elaborate-backend
     volumes:
       - ./:/go/src/Elaborate-backend
     ports:
