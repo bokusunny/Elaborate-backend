@@ -22,6 +22,11 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type response struct {
+	Status int   `json:"status"`
+	User   *User `json:"user"`
+}
+
 func gormConnect() *gorm.DB {
 	DBMS := "mysql"
 	USER := "progate-mafia"
@@ -45,6 +50,19 @@ func newUser(name string, email string) *User {
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
+}
+
+func (r *response) returnJSON(w http.ResponseWriter) {
+	res, err := json.Marshal(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	log.Printf("response : %s\n", string(res))
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(res)
 }
 
 func main() {
@@ -77,12 +95,14 @@ func main() {
 
 		newUser := newUser(user.Name, user.Email)
 		db.Create(&newUser)
+		res := response{200, newUser}
+		res.returnJSON(w)
 	}
 
-	// TODO: Arrange CORS config
-	allowedOrigins := handlers.AllowedOrigins([]string{"http://localhot:8080"})
-	allowedMethods := handlers.AllowedMethods([]string{"GET"})
-	allowedHeaders := handlers.AllowedHeaders([]string{"Authorization"})
+	// TODO: originは環境によって場合分け
+	allowedOrigins := handlers.AllowedOrigins([]string{"http://localhost:8080"})
+	allowedMethods := handlers.AllowedMethods([]string{"GET", "POST"})
+	allowedHeaders := handlers.AllowedHeaders([]string{"Authorization", "content-type"})
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", createUser)
