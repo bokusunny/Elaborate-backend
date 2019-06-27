@@ -2,7 +2,6 @@ package entity
 
 import "time"
 
-// User has user data sent by firebase cloud functions
 type User struct {
 	ID        int       `json:"id" gorm:"primary_key auto_increment"`
 	Name      string    `json:"name"`
@@ -11,7 +10,6 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-// NewUser returns user data with given parameters
 func NewUser(name string, email string) *User {
 	return &User{
 		Name:      name,

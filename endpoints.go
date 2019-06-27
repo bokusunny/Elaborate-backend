@@ -21,7 +21,7 @@ func main() {
 	allowedHeaders := handlers.AllowedHeaders([]string{"Authorization", "Content-Type"})
 
 	r := mux.NewRouter()
-	r.HandleFunc("/", api.CreateUser) // TODO: "/users"に変更 && POSTリクエストに限定
+	r.HandleFunc("/", api.CreateUserHandler) // TODO: "/users"に変更 && POSTリクエストに限定
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("port"), handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(r)))
 }

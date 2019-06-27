@@ -8,7 +8,6 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql" // blank import for gorm
 )
 
-// DB which connected by gorm
 var DB *gorm.DB
 
 func init() {
@@ -33,7 +32,6 @@ func gormConnect() *gorm.DB {
 	db, err := gorm.Open(DBMS, CONNECT)
 
 	if err != nil {
-		log.Print(err)
 		panic(err.Error())
 	}
 
