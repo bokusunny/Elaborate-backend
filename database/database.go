@@ -2,6 +2,7 @@ package database
 
 import (
 	"log"
+	"os"
 
 	"github.com/Elaborate-backend/entity"
 	"github.com/jinzhu/gorm"
@@ -25,7 +26,9 @@ func gormConnect() *gorm.DB {
 	DBMS := "mysql"
 	USER := "progate-mafia"
 	PASS := "ninjawanko"
-	PROTOCOL := "tcp(mysql:3306)"
+	// TODO: production環境も加味
+	HOST := map[bool]string{false: "mysql", true: "127.0.0.1"}[os.Getenv("GO_ENV") == "test"]
+	PROTOCOL := "tcp(" + HOST + ":3306)"
 	DBNAME := "elaborate"
 
 	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME

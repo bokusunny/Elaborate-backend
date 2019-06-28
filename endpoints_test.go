@@ -16,7 +16,7 @@ func TestCreateUserHandler(t *testing.T) {
 
 	req, err := http.NewRequest("POST", "/", bytes.NewBuffer(testBody))
 	if err != nil {
-		t.Fatal(err)
+		t.Fatal(err.Error())
 	}
 
 	rr := httptest.NewRecorder()
@@ -31,10 +31,11 @@ func TestCreateUserHandler(t *testing.T) {
 
 	var res api.Response
 	if err := json.Unmarshal(rr.Body.Bytes(), &res); err != nil {
-		t.Fatal("failed to unmarshal response.")
+		t.Fatal(err.Error())
 	}
 
 	// 標準パッケージではtimeをモックできないのでresponseのうちcreatedAt, updatedAtは検証しない
+	// TODO: User structのプロパティが増えるとここもいちいち書き換えないといけないのでなんとかする
 	if res.User.Name != testData["name"] {
 		t.Errorf("returned user has unexpected name: got %v want %v",
 			res.User.Name, testData["name"])
