@@ -13,7 +13,7 @@ var DB *gorm.DB
 
 func init() {
 	DB = gormConnect()
-	log.Printf("database connected\n")
+	log.Printf("[INFO] database connected\n")
 
 	if !DB.HasTable(&entity.User{}) {
 		DB.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&entity.User{})
@@ -38,7 +38,7 @@ func gormConnect() *gorm.DB {
 		panic(err.Error())
 	}
 
-	log.Printf("should be connected just once.\n")
+	log.Printf("[INFO] should be connected just once.\n")
 
 	return db
 }

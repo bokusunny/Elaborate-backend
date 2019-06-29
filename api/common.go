@@ -20,7 +20,7 @@ func (r *Response) returnJSONToClient(w http.ResponseWriter) {
 		return
 	}
 
-	log.Printf("response : %s\n", string(res))
+	log.Printf("[INFO] response : %s\n", string(res))
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(res)
