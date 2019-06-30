@@ -2,6 +2,27 @@
 Elaborate backend with Golang.
 
 ## Set up
+### firebase secret key
+Firebase secret keys like below are required.
+```json
+{
+    "type": "service_account",
+    "project_id": "...",
+    "private_key_id": "...",
+    "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-awott@progate-mafia-tmp.iam.gserviceaccount.com",
+    "client_id": "...",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-awott%40progate-mafia-tmp.iam.gserviceaccount.com"
+}
+```
+Please contact the author to get the keys and paste them after creating a file like this.
+```sh
+# At root directory of Elaborate-backend
+touch service_account_key.json
+```
 ### building
 ```sh
 # https://hub.docker.com/search/?offering=community&type=edition などで予めDockerのインストールをしておく
