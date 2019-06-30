@@ -15,11 +15,6 @@ func init() {
 	DB = gormConnect()
 	log.Println("[INFO] database connected")
 
-	if !DB.HasTable(&entity.User{}) {
-		DB.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&entity.User{})
-		log.Println("[INFO] User table created")
-	}
-
 	if !DB.HasTable(&entity.Directory{}) {
 		DB.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&entity.Directory{})
 		log.Println("[INFO] Directory table created")
@@ -35,7 +30,6 @@ func init() {
 		log.Println("[INFO] Commit table created")
 	}
 
-	DB.AutoMigrate(&entity.User{})
 	DB.AutoMigrate(&entity.Directory{})
 	DB.AutoMigrate(&entity.Branch{})
 	DB.AutoMigrate(&entity.Commit{})

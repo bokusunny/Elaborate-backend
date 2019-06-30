@@ -12,7 +12,7 @@ import (
 
 type DirectoryResponse struct {
 	Status    int               `json:"status"`
-	Directory *entity.Directory `json:"directory"`
+	Directory *entity.Directory `json:"newDirectory"`
 }
 
 // POST '/directories'
@@ -28,15 +28,15 @@ func CreateDirectoryHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error reading request body", http.StatusInternalServerError)
 	}
 
-	log.Printf("[INFO] I got post request, json: %v", string(body))
+	log.Printf("[INFO] I got post request, json: %v\n", string(body))
 
 	var directory entity.Directory
 	if err := json.Unmarshal(body, &directory); err != nil {
-		log.Fatal(err.Error())
+		http.Error(w, "Error unmarshal request body", http.StatusInternalServerError)
 	}
 
 	userID := r.Header.Get("sub")
-	log.Printf("[INFO] The uid for new directory: %v", userID)
+	log.Printf("[INFO] The uid for new directory: %v\n", userID)
 
 	newDirectory := entity.NewDirectory(directory.Name, userID)
 	database.DB.Create(&newDirectory)
