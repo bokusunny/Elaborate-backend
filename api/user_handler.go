@@ -32,5 +32,5 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	newUser := entity.NewUser(user.Name, user.Email)
 	database.DB.Create(&newUser)
 	res := Response{http.StatusOK, newUser}
-	res.returnJSONToClient(w)
+	returnJSONToClient(w, res)
 }
