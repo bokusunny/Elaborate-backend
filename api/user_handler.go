@@ -22,11 +22,11 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error reading request body", http.StatusInternalServerError)
 	}
 
-	log.Printf("I got post request, json: " + string(body))
+	log.Printf("[INFO] I got post request, json: " + string(body))
 
 	var user entity.User
 	if err := json.Unmarshal(body, &user); err != nil {
-		log.Fatal(err)
+		log.Fatal(err.Error())
 	}
 
 	newUser := entity.NewUser(user.Name, user.Email)
