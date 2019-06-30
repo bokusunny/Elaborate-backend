@@ -2,18 +2,18 @@ package entity
 
 import "time"
 
-type User struct {
+type Commit struct {
 	ID        int       `json:"id" gorm:"primary_key auto_increment"`
 	Name      string    `json:"name"`
-	Email     string    `json:"email"`
+	Body      string    `json:"body"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-func NewUser(name string, email string) *User {
-	return &User{
+func NewCommit(name string, body string) *Commit {
+	return &Commit{
 		Name:      name,
-		Email:     email,
+		Body:      body,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
