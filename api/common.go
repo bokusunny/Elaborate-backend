@@ -8,19 +8,19 @@ import (
 	"github.com/Elaborate-backend/entity"
 )
 
-type response struct {
+type Response struct {
 	Status int          `json:"status"`
 	User   *entity.User `json:"user"`
 }
 
-func (r *response) returnJSONToClient(w http.ResponseWriter) {
+func (r *Response) returnJSONToClient(w http.ResponseWriter) {
 	res, err := json.Marshal(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	log.Printf("response : %s\n", string(res))
+	log.Printf("[INFO] response : %s\n", string(res))
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(res)
