@@ -62,6 +62,7 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", authMiddleware(api.CreateUserHandler)) // TODO: "/users"に変更 && POSTリクエストに限定
+	r.HandleFunc("/directories", authMiddleware(api.CreateDirectoryHandler))
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("port"), handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(r)))
 }
