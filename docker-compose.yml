@@ -5,7 +5,7 @@ services:
     image: elaborate/mysql
     container_name: elaborate-mysql
     ports:
-      - "3306:3306"
+      - "4306:3306" # 3306番ポートはlocalのmysqlに占有されている恐れがあるので避けている
     environment:
       MYSQL_DATABASE: elaborate
       MYSQL_ROOT_PASSWORD: password
