@@ -10,6 +10,7 @@ import (
 	"github.com/Elaborate-backend/api"
 )
 
+// TODO: APIディレクトリ配下に移管
 func TestCreateDirectoryHandler(t *testing.T) {
 	testData := map[string]string{"name": "testDir"}
 	testBody, _ := json.Marshal(testData)
