@@ -29,7 +29,7 @@ func TestCreateDirectoryHandler(t *testing.T) {
 			status, http.StatusOK)
 	}
 
-	var res api.DirectoryResponse
+	var res api.NewDirectoryResponse
 	if err := json.Unmarshal(rr.Body.Bytes(), &res); err != nil {
 		t.Fatal(err.Error())
 	}

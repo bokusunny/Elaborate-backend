@@ -15,10 +15,11 @@ type Branch struct {
 	Commits        []Commit
 }
 
-func NewBranch(name string, baseBranchID int, baseBranchName string, body string, state string) *Branch {
+func NewBranch(name string, directoryID int, baseBranchID int, baseBranchName string, body string, state string) *Branch {
 	// TODO: バリデーション
 	return &Branch{
 		Name:           name,
+		DirectoryID:    directoryID,
 		BaseBranchID:   baseBranchID,
 		BaseBranchName: baseBranchName,
 		Body:           body,

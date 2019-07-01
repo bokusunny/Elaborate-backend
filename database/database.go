@@ -30,9 +30,7 @@ func init() {
 		log.Println("[INFO] Commit table created")
 	}
 
-	DB.AutoMigrate(&entity.Directory{})
-	DB.AutoMigrate(&entity.Branch{})
-	DB.AutoMigrate(&entity.Commit{})
+	DB.AutoMigrate(&entity.Directory{}, &entity.Branch{}, &entity.Commit{})
 }
 
 func gormConnect() *gorm.DB {

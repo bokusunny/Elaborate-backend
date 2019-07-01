@@ -62,6 +62,8 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/directories", authMiddleware(api.FetchDirectoriesHandler)).Methods("GET")
 	r.HandleFunc("/directories", authMiddleware(api.CreateDirectoryHandler)).Methods("POST")
+	r.HandleFunc("/directories/{directoryID:[1-9][0-9]*}/branches", authMiddleware(api.FetchOpenBranchesHandler)).Methods("GET")
+	r.HandleFunc("/directories/{directoryID:[1-9][0-9]*}/branches", authMiddleware(api.CreateBranchHandler)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("port"), handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(r)))
 }
