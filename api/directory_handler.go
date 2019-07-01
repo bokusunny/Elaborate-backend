@@ -18,22 +18,6 @@ type DirectoriesResponse struct {
 	Directories []entity.Directory `json:"directories"`
 }
 
-// GET '/Directories'
-func FetchDirectoriesHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
-	}
-
-	userID := r.Header.Get("sub")
-	log.Printf("[INFO] The uid for new directory: %v\n", userID)
-
-	var directories []entity.Directory
-	database.DB.Where("user_id = ?", userID).Find(&directories)
-
-	res := DirectoriesResponse{directories}
-	returnJSONToClient(w, res)
-}
-
 // POST '/directories'
 func CreateDirectoryHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {

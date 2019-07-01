@@ -61,11 +61,6 @@ func main() {
 	// ----------------------------------------------------------
 	r.HandleFunc(
 		"/directories",
-		authMiddleware(api.FetchDirectoriesHandler),
-	).Methods("GET")
-
-	r.HandleFunc(
-		"/directories",
 		authMiddleware(api.CreateDirectoryHandler),
 	).Methods("POST")
 
