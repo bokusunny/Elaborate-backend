@@ -6,6 +6,7 @@ type Commit struct {
 	ID        int       `json:"id" gorm:"primary_key auto_increment"`
 	Name      string    `json:"name"`
 	Body      string    `json:"body"`
+	BranchID  int       `json:"branchId"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }

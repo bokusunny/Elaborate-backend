@@ -5,12 +5,14 @@ import "time"
 type Branch struct {
 	ID             int       `json:"id" gorm:"primary_key auto_increment"`
 	Name           string    `json:"name"`
+	DirectoryID    int       `json:"directoryId"`
 	BaseBranchID   int       `json:"baseBranchId"`
 	BaseBranchName string    `json:"baseBranchName"`
 	Body           string    `json:"body"`
 	State          string    `json:"state"` // TODO: 'open' | 'closed' | 'merged'のEnumチェック
 	CreatedAt      time.Time `json:"createdAt"`
 	UpdatedAt      time.Time `json:"updatedAt"`
+	Commits        []Commit
 }
 
 func NewBranch(name string, baseBranchID int, baseBranchName string, body string, state string) *Branch {

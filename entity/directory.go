@@ -8,6 +8,7 @@ type Directory struct {
 	UserID    string    `json:"userId"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
+	Branches  []Branch
 }
 
 func NewDirectory(name string, userID string) *Directory {
