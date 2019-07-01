@@ -35,8 +35,7 @@ func authMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		idToken := strings.Replace(authHeader, "Bearer ", "", 1)
 
 		// JWT の検証
-		token, err := auth.VerifyIDToken(context.Background(), idToken)
-		if err != nil {
+		if token, err := auth.VerifyIDToken(context.Background(), idToken); err != nil {
 			// JWT が無効なら Handler に進まず別処理
 			log.Printf("[ERROR] fail to verify ID token: %v\n", err)
 			w.WriteHeader(http.StatusUnauthorized)
@@ -61,6 +60,7 @@ func main() {
 	allowedHeaders := handlers.AllowedHeaders([]string{"Authorization", "Content-Type"})
 
 	r := mux.NewRouter()
+	r.HandleFunc("/directories", authMiddleware(api.FetchDirectoriesHandler)).Methods("GET")
 	r.HandleFunc("/directories", authMiddleware(api.CreateDirectoryHandler)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("port"), handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(r)))

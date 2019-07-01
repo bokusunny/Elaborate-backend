@@ -10,16 +10,34 @@ import (
 	"github.com/Elaborate-backend/entity"
 )
 
-type DirectoryResponse struct {
-	Status    int               `json:"status"`
+type NewDirectoryResponse struct {
 	Directory *entity.Directory `json:"newDirectory"`
+}
+
+type DirectoriesResponse struct {
+	Directories []entity.Directory `json:"directories"`
+}
+
+// GET '/Directories'
+func FetchDirectoriesHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+	}
+
+	userID := r.Header.Get("sub")
+	log.Printf("[INFO] The uid for new directory: %v\n", userID)
+
+	var directories []entity.Directory
+	database.DB.Where("user_id = ?", userID).Find(&directories)
+
+	res := DirectoriesResponse{directories}
+	returnJSONToClient(w, res)
 }
 
 // POST '/directories'
 func CreateDirectoryHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
-		return
 	}
 
 	log.Println("[INFO] Start creating new directory!")
@@ -39,7 +57,7 @@ func CreateDirectoryHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[INFO] The uid for new directory: %v\n", userID)
 
 	newDirectory := entity.NewDirectory(directory.Name, userID)
-	database.DB.Create(&newDirectory)
-	res := DirectoryResponse{http.StatusOK, newDirectory}
+	database.DB.Create(newDirectory)
+	res := NewDirectoryResponse{newDirectory}
 	returnJSONToClient(w, res)
 }
