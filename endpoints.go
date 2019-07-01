@@ -56,7 +56,9 @@ func main() {
 
 	r := mux.NewRouter()
 
+	// ----------------------------------------------------------
 	// Directory
+	// ----------------------------------------------------------
 	r.HandleFunc(
 		"/directories",
 		authMiddleware(api.FetchDirectoriesHandler),
@@ -67,7 +69,9 @@ func main() {
 		authMiddleware(api.CreateDirectoryHandler),
 	).Methods("POST")
 
+	// ----------------------------------------------------------
 	// Branch
+	// ----------------------------------------------------------
 	r.HandleFunc(
 		"/directories/{directoryID:[1-9][0-9]*}/branches",
 		authMiddleware(api.FetchOpenBranchesHandler),
@@ -80,12 +84,17 @@ func main() {
 
 	r.HandleFunc(
 		"/directories/{directoryID:[1-9][0-9]*}/branches/{branchID:[1-9][0-9]*}",
-		authMiddleware(api.FetchBranchWithIDHandler),
+		authMiddleware(api.FetchBranchByIDHandler),
 	).Methods("GET")
+
+	r.HandleFunc(
+		"/directories/{directoryID:[1-9][0-9]*}/branches/{branchID:[1-9][0-9]*}",
+		authMiddleware(api.UpdateBranchHandler),
+	).Methods("PUT")
 
 	// TODO: originは環境によって場合分け
 	allowedOrigins := handlers.AllowedOrigins([]string{"http://localhost:8080"})
-	allowedMethods := handlers.AllowedMethods([]string{"GET", "POST"})
+	allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "PUT"})
 	allowedHeaders := handlers.AllowedHeaders([]string{"Authorization", "Content-Type"})
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("port"), handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(r)))
