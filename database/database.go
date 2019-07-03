@@ -30,9 +30,7 @@ func init() {
 		log.Println("[INFO] Commit table created")
 	}
 
-	DB.AutoMigrate(&entity.Directory{})
-	DB.AutoMigrate(&entity.Branch{})
-	DB.AutoMigrate(&entity.Commit{})
+	DB.AutoMigrate(&entity.Directory{}, &entity.Branch{}, &entity.Commit{})
 }
 
 func gormConnect() *gorm.DB {
@@ -43,8 +41,9 @@ func gormConnect() *gorm.DB {
 	HOST := map[bool]string{false: "mysql", true: "127.0.0.1"}[os.Getenv("GO_ENV") == "test"]
 	PROTOCOL := "tcp(" + HOST + ":3306)"
 	DBNAME := "elaborate"
+	OPTIONS := "parseTime=true"
 
-	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME
+	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME + "?" + OPTIONS
 	db, err := gorm.Open(DBMS, CONNECT)
 
 	if err != nil {
