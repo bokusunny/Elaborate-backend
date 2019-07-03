@@ -35,8 +35,7 @@ func authMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		idToken := strings.Replace(authHeader, "Bearer ", "", 1)
 
 		// JWT の検証
-		token, err := auth.VerifyIDToken(context.Background(), idToken)
-		if err != nil {
+		if token, err := auth.VerifyIDToken(context.Background(), idToken); err != nil {
 			// JWT が無効なら Handler に進まず別処理
 			log.Printf("[ERROR] fail to verify ID token: %v\n", err)
 			w.WriteHeader(http.StatusUnauthorized)
@@ -55,14 +54,56 @@ func main() {
 	db := database.DB
 	defer db.Close()
 
+	r := mux.NewRouter()
+
+	// ----------------------------------------------------------
+	// Directory
+	// ----------------------------------------------------------
+	r.HandleFunc(
+		"/directories",
+		authMiddleware(api.FetchDirectoriesHandler),
+	).Methods("GET")
+
+	r.HandleFunc(
+		"/directories",
+		authMiddleware(api.CreateDirectoryHandler),
+	).Methods("POST")
+
+	// ----------------------------------------------------------
+	// Branch
+	// ----------------------------------------------------------
+	r.HandleFunc(
+		"/directories/{directoryID:[1-9][0-9]*}/branches",
+		authMiddleware(api.FetchOpenBranchesHandler),
+	).Methods("GET")
+
+	r.HandleFunc(
+		"/directories/{directoryID:[1-9][0-9]*}/branches",
+		authMiddleware(api.CreateBranchHandler),
+	).Methods("POST")
+
+	r.HandleFunc(
+		"/directories/{directoryID:[1-9][0-9]*}/branches/{branchID:[1-9][0-9]*}",
+		authMiddleware(api.FetchBranchByIDHandler),
+	).Methods("GET")
+
+	r.HandleFunc(
+		"/directories/{directoryID:[1-9][0-9]*}/branches/{branchID:[1-9][0-9]*}",
+		authMiddleware(api.UpdateBranchHandler),
+	).Methods("PUT")
+
+	// ----------------------------------------------------------
+	// Commits
+	// ----------------------------------------------------------
+	r.HandleFunc(
+		"/directories/{directoryID:[1-9][0-9]*}/branches/{branchID:[1-9][0-9]*}/commits",
+		authMiddleware(api.CreateCommit),
+	).Methods("POST")
+
 	// TODO: originは環境によって場合分け
 	allowedOrigins := handlers.AllowedOrigins([]string{"http://localhost:8080"})
-	allowedMethods := handlers.AllowedMethods([]string{"GET", "POST"})
+	allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "PUT"})
 	allowedHeaders := handlers.AllowedHeaders([]string{"Authorization", "Content-Type"})
-
-	r := mux.NewRouter()
-	r.HandleFunc("/", authMiddleware(api.CreateUserHandler)) // TODO: "/users"に変更 && POSTリクエストに限定
-	r.HandleFunc("/directories", authMiddleware(api.CreateDirectoryHandler))
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("port"), handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(r)))
 }

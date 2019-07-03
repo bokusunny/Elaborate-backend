@@ -4,14 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-
-	"github.com/Elaborate-backend/entity"
 )
-
-type Response struct {
-	Status int          `json:"status"`
-	User   *entity.User `json:"user"`
-}
 
 // interfaceで実装するのあんまよくないかも？
 func returnJSONToClient(w http.ResponseWriter, r interface{}) {
