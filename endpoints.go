@@ -42,8 +42,11 @@ func authMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			w.WriteHeader(http.StatusUnauthorized)
 			w.Write([]byte("error verifying ID token\n"))
 			return
+		} else {
+			// handler内でuidを取得できるように
+			r.Header.Set("sub", token.UID)
+			log.Printf("[INFO] uid in Verified token: %v\n", token.UID)
 		}
-		log.Printf("[INFO] Verified ID token: %v\n", token)
 		next.ServeHTTP(w, r)
 	}
 }
@@ -59,6 +62,7 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", authMiddleware(api.CreateUserHandler)) // TODO: "/users"に変更 && POSTリクエストに限定
+	r.HandleFunc("/directories", authMiddleware(api.CreateDirectoryHandler))
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("port"), handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(r)))
 }

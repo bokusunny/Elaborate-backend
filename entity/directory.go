@@ -2,18 +2,18 @@ package entity
 
 import "time"
 
-type User struct {
+type Directory struct {
 	ID        int       `json:"id" gorm:"primary_key auto_increment"`
 	Name      string    `json:"name"`
-	Email     string    `json:"email"`
+	UserID    string    `json:"userId"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
-func NewUser(name string, email string) *User {
-	return &User{
+func NewDirectory(name string, userID string) *Directory {
+	return &Directory{
 		Name:      name,
-		Email:     email,
+		UserID:    userID,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}

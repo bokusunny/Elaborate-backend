@@ -13,7 +13,8 @@ type Response struct {
 	User   *entity.User `json:"user"`
 }
 
-func (r *Response) returnJSONToClient(w http.ResponseWriter) {
+// interfaceで実装するのあんまよくないかも？
+func returnJSONToClient(w http.ResponseWriter, r interface{}) {
 	res, err := json.Marshal(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

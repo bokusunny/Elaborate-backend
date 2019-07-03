@@ -13,13 +13,32 @@ var DB *gorm.DB
 
 func init() {
 	DB = gormConnect()
-	log.Printf("[INFO] database connected\n")
+	log.Println("[INFO] database connected")
 
 	if !DB.HasTable(&entity.User{}) {
 		DB.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&entity.User{})
+		log.Println("[INFO] User table created")
+	}
+
+	if !DB.HasTable(&entity.Directory{}) {
+		DB.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&entity.Directory{})
+		log.Println("[INFO] Directory table created")
+	}
+
+	if !DB.HasTable(&entity.Branch{}) {
+		DB.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&entity.Branch{})
+		log.Println("[INFO] Branch table created")
+	}
+
+	if !DB.HasTable(&entity.Commit{}) {
+		DB.Set("gorm:table_options", "ENGINE=InnoDB").CreateTable(&entity.Commit{})
+		log.Println("[INFO] Commit table created")
 	}
 
 	DB.AutoMigrate(&entity.User{})
+	DB.AutoMigrate(&entity.Directory{})
+	DB.AutoMigrate(&entity.Branch{})
+	DB.AutoMigrate(&entity.Commit{})
 }
 
 func gormConnect() *gorm.DB {
@@ -38,7 +57,7 @@ func gormConnect() *gorm.DB {
 		panic(err.Error())
 	}
 
-	log.Printf("[INFO] should be connected just once.\n")
+	log.Println("[INFO] should be connected just once.")
 
 	return db
 }
