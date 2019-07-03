@@ -61,6 +61,11 @@ func main() {
 	// ----------------------------------------------------------
 	r.HandleFunc(
 		"/directories",
+		authMiddleware(api.FetchDirectoriesHandler),
+	).Methods("GET")
+
+	r.HandleFunc(
+		"/directories",
 		authMiddleware(api.CreateDirectoryHandler),
 	).Methods("POST")
 
@@ -86,6 +91,14 @@ func main() {
 		"/directories/{directoryID:[1-9][0-9]*}/branches/{branchID:[1-9][0-9]*}",
 		authMiddleware(api.UpdateBranchHandler),
 	).Methods("PUT")
+
+	// ----------------------------------------------------------
+	// Commits
+	// ----------------------------------------------------------
+	r.HandleFunc(
+		"/directories/{directoryID:[1-9][0-9]*}/branches/{branchID:[1-9][0-9]*}/commits",
+		authMiddleware(api.CreateCommit),
+	).Methods("POST")
 
 	// TODO: originは環境によって場合分け
 	allowedOrigins := handlers.AllowedOrigins([]string{"http://localhost:8080"})
