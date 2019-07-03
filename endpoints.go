@@ -92,6 +92,14 @@ func main() {
 		authMiddleware(api.UpdateBranchHandler),
 	).Methods("PUT")
 
+	// ----------------------------------------------------------
+	// Commits
+	// ----------------------------------------------------------
+	r.HandleFunc(
+		"/directories/{directoryID:[1-9][0-9]*}/branches/{branchID:[1-9][0-9]*}/commits",
+		authMiddleware(api.CreateCommit),
+	).Methods("POST")
+
 	// TODO: originは環境によって場合分け
 	allowedOrigins := handlers.AllowedOrigins([]string{"http://localhost:8080"})
 	allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "PUT"})
