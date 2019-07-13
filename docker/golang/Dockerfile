@@ -4,6 +4,7 @@ WORKDIR /go/src/Elaborate-backend
 COPY . .
 ENV GO111MODULE=on
 ENV port=3000
+ENV GO_ENV=dev
 
 RUN go get github.com/pilu/fresh
 CMD ["fresh"]
