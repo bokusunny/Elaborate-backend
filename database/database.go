@@ -35,10 +35,17 @@ func init() {
 
 func gormConnect() *gorm.DB {
 	DBMS := "mysql"
-	USER := "progate-mafia"
-	PASS := "ninjawanko"
-	// TODO: production環境も加味
-	HOST := map[bool]string{false: "mysql", true: "127.0.0.1"}[os.Getenv("GO_ENV") == "test"]
+	USER := "elaborate"
+	PASS := "ninjawanko0714"
+	var HOST string
+	switch env := os.Getenv("GO_ENV"); env {
+	case "prod":
+		HOST = "elaborate-mysql.cqzfkiclzjux.ap-northeast-1.rds.amazonaws.com"
+	case "dev":
+		HOST = "mysql"
+	case "test":
+		HOST = "127.0.0.1"
+	}
 	PROTOCOL := "tcp(" + HOST + ":3306)"
 	DBNAME := "elaborate"
 	OPTIONS := "parseTime=true"

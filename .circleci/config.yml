@@ -9,8 +9,8 @@ jobs:
         environment:
           MYSQL_DATABASE: elaborate
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_USER: progate-mafia
-          MYSQL_PASSWORD: ninjawanko
+          MYSQL_USER: elaborate
+          MYSQL_PASSWORD: ninjawanko0714
 
     steps:
       - checkout
