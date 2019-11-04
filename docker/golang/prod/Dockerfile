@@ -1,7 +1,7 @@
 FROM golang:1.11.11
 
 WORKDIR /go/src/Elaborate-backend
-COPY . .
+COPY . /go/src/Elaborate-backend
 ENV GO111MODULE=on
 ENV GO_ENV=prod
 
