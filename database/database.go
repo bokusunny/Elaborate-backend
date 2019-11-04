@@ -36,7 +36,7 @@ func init() {
 func gormConnect() *gorm.DB {
 	DBMS := "mysql"
 	USER := "elaborate"
-	PASS := "ninjawanko0714"
+	PASS := "tGHG8Zzkapb9"
 	var HOST string
 	switch env := os.Getenv("GO_ENV"); env {
 	case "prod":
