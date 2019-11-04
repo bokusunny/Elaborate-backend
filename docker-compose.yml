@@ -1,21 +1,6 @@
 version: '3'
 services:
-  mysql:
-    build: ./docker/mysql
-    image: elaborate/mysql
-    container_name: elaborate-mysql
-    ports:
-      - "4306:3306" # 3306番ポートはlocalのmysqlに占有されている恐れがあるので避けている
-    environment:
-      MYSQL_DATABASE: elaborate
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: progate-mafia
-      MYSQL_PASSWORD: ninjawanko
-    volumes:
-      - ./docker/mysql/conf.d:/etc/mysql/conf.d
   app:
-    links:
-      - mysql
     build:
       context: .
       dockerfile: ./docker/golang/Dockerfile
