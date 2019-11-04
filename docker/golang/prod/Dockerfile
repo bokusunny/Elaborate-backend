@@ -5,5 +5,7 @@ COPY . .
 ENV GO111MODULE=on
 ENV GO_ENV=prod
 
-RUN go get github.com/pilu/fresh
-CMD ["fresh"]
+# バイナリの実行ファイルを生成する
+RUN go build -o main .
+
+CMD ["./main"]
