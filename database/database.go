@@ -40,7 +40,7 @@ func gormConnect() *gorm.DB {
 	var HOST string
 	switch env := os.Getenv("GO_ENV"); env {
 	case "prod":
-		HOST = "elaborate-mysql.cqzfkiclzjux.ap-northeast-1.rds.amazonaws.com"
+		HOST = "elaborate-db-instance.cqzfkiclzjux.ap-northeast-1.rds.amazonaws.com"
 	case "dev":
 		HOST = "mysql"
 	case "test":

@@ -1,11 +1,10 @@
 FROM golang:1.11.11
 
 WORKDIR /go/src/Elaborate-backend
-COPY . /go/src/Elaborate-backend
+COPY . .
 ENV GO111MODULE=on
+ENV port=3000
 ENV GO_ENV=prod
 
-# バイナリの実行ファイルを生成する
-RUN go build -o main .
-
-CMD ["./main"]
+RUN go get github.com/pilu/fresh
+CMD ["fresh"]
