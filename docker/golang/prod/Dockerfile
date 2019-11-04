@@ -6,6 +6,6 @@ ENV GO111MODULE=on
 ENV GO_ENV=prod
 
 # バイナリの実行ファイルを生成する
-RUN go build -o main /go/src/Elaborate-backend
+RUN go build -o main .
 
 CMD ["./main"]
