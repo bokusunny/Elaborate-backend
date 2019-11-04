@@ -18,7 +18,7 @@ services:
       - mysql
     build:
       context: .
-      dockerfile: ./docker/golang/dev/Dockerfile
+      dockerfile: ./docker/golang/prod/Dockerfile
     image: elaborate/backend
     container_name: elaborate-backend
     volumes:
