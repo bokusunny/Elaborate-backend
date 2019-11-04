@@ -5,12 +5,6 @@ jobs:
     docker:
       # TODO: custom docker imageをpullできたらしたい
       - image: circleci/golang:1.11
-      - image: circleci/mysql:5.7
-        environment:
-          MYSQL_DATABASE: elaborate
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_USER: elaborate
-          MYSQL_PASSWORD: ninjawanko0714
 
     steps:
       - checkout
@@ -18,10 +12,6 @@ jobs:
       - restore_cache:
           keys:
             - go-mod-v1-{{ checksum "go.sum" }}
-
-      - run:
-          name: Wait for mysql setup
-          command: dockerize -wait tcp://127.0.0.1:3306 -timeout 1m -wait-retry-interval 5s
 
       - run:
           name: Run test!
